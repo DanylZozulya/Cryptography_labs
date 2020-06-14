@@ -1,4 +1,3 @@
-import sys
 from bitstring import BitArray
 
 
@@ -70,9 +69,9 @@ class sha256:
         # Words 17-64 are created by formula
         for x in range(16, 64):
             # Each word is created by performing functions on previous words in the list
-            nextWord = self.moduloAddition(self.lowerSigmaOne(wordList[x - 2]),
+            nextWord = self.moduloAddition(self._sigma1(wordList[x - 2]),
                                            wordList[x - 7],
-                                           self.lowerSigmaZero(wordList[x - 15]),
+                                           self._sigma0(wordList[x - 15]),
                                            wordList[x - 16])
             wordList.append(nextWord)
 
@@ -104,14 +103,14 @@ class sha256:
         for x in range(0, 64):
             # Calculate Function T1
             tOne = self.moduloAddition(h,
-                                       self.upperSigmaOne(e),
-                                       self.chFunction(e, f, g),
+                                       self._Sigma1(e),
+                                       self._Ch(e, f, g),
                                        self.kValues[x],
                                        wordList[x])
 
             # Calculate Function T2
-            tTwo = self.moduloAddition(self.upperSigmaZero(a),
-                                       self.majFunction(a, b, c))
+            tTwo = self.moduloAddition(self._Sigma0(a),
+                                       self._Maj(a, b, c))
 
             # Swap values
             h = g
@@ -267,9 +266,8 @@ class sha256:
 # This is the end of the SHA256 class
 
 if __name__ == '__main__':
-    # Take in password and keyfile from command line
-    pwd = sys.argv[1]
-    keyfile = sys.argv[2]
+    pwd = ""
+    keyfile = "C:\\Users\\zozul\\Desktop\\bigdata\\lab1\\lab3\\keyfile.txt"
 
     # Object to hash the password
     hasher = sha256()
@@ -282,4 +280,5 @@ if __name__ == '__main__':
     # Write out the resulting hash to the keyfile
     outfile = open(keyfile, 'w')
     outfile.write(hashedPwd.hex)
-    outfile.close
+    outfile.close()
+
