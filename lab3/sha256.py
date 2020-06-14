@@ -267,7 +267,7 @@ class sha256:
 
 if __name__ == '__main__':
     pwd = ""
-    keyfile = "C:\\Users\\zozul\\Desktop\\bigdata\\lab1\\lab3\\keyfile.txt"
+    keyfile = "path to output file"
 
     # Object to hash the password
     hasher = sha256()
