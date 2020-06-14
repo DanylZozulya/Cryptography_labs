@@ -1,0 +1,12 @@
+Enter bit_length: 4
+Running RSA...
+Generating public/private keypair...
+181 353
+Public Key:  (42769, 63893)
+Private Key:  (58609, 63893)
+Write msg: hello world
+[104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]
+Encrypted msg:
+320192037355313553132446832189432446851071553132571
+Decrypted msg:
+hello world
