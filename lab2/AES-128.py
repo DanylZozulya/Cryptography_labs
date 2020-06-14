@@ -1,9 +1,11 @@
 import os
-import sys
+import random
 import math
+from Cryptodome.Cipher import AES
 
 
-class AES(object):
+
+class AES128(object):
     '''AES funtions for a single block
     '''
     # Very annoying code:  all is for an object, but no state is kept!
@@ -394,7 +396,7 @@ class AESModeOfOperation(object):
     '''
     # Very annoying code:  all is for an object, but no state is kept!
     # Should just be plain functions in an AES_BlockMode module.
-    aes = AES()
+    aes = AES128()
 
     # structure of supported modes of operation
     modeOfOperation = dict(OFB=0, CFB=1, CBC=2)
@@ -607,27 +609,30 @@ def generateRandomKey(keysize):
     return os.urandom(keysize)
 
 
-def testStr(cleartext, keysize=16, modeName="CBC"):
-    '''Test with random key, choice of mode.'''
-    print('Random key test', 'Mode:', modeName)
-    print('cleartext:', cleartext)
-    key = generateRandomKey(keysize)
-    print('Key:', [ord(x) for x in key])
-    mode = AESModeOfOperation.modeOfOperation[modeName]
-    cipher = encryptData(key, cleartext, mode, 10)
-    print('Cipher:', [ord(x) for x in cipher])
-    decr = decryptData(key, cipher, mode)
-    print('Decrypted:', decr)
-
+def get_random_bytes(n):
+    res = [random.randrange(0, 255) for _ in range(n)]
+    return bytes(res)
 
 if __name__ == "__main__":
+    data = b'hello world 1234'
+    data2 = 'hello world 1234'
     moo = AESModeOfOperation()
-    cleartext = "This is a test with several blocks!"
-    cypherkey = [143, 194, 34, 208, 145, 203, 230, 143, 177, 246, 97, 206, 145, 92, 255, 84]
-    iv = [103, 35, 148, 239, 76, 213, 47, 118, 255, 222, 123, 176, 106, 134, 98, 92]
-    mode, orig_len, ciph = moo.encrypt(cleartext, moo.modeOfOperation["CBC"],
-                                       cypherkey, moo.aes.keySize, iv, 10)
-    print('m=%s, ol=%s (%s), ciph=%s' % (mode, orig_len, len(cleartext), ciph))
-    decr = moo.decrypt(ciph, orig_len, mode, cypherkey,
+    test_key = [0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c]
+    print("Key - ", bytes(test_key))
+    test_block = list(range(16))
+    iv = get_random_bytes(16)
+    e_cipher = AES.new(bytes(test_key), AES.MODE_CBC, IV=iv)
+    d_cipher = AES.new(bytes(test_key), AES.MODE_CBC, IV=iv)
+    ciphertext = e_cipher.encrypt(bytes(data))
+    print("plaintext:", data)
+    print("IV:", iv)
+    print("ciphertext:", ciphertext)
+    print("decrypted cyphertext:", d_cipher.decrypt(ciphertext))
+
+    print("____________MyAES_________________")
+    mode, orig_len, ciph = moo.encrypt(data2, moo.modeOfOperation["CBC"],
+                                       test_key, moo.aes.keySize, iv, 10)
+    print("ciphertext", bytes(ciph))
+    decr = moo.decrypt(ciphertext, orig_len, mode, test_key,
                        moo.aes.keySize, iv)
-    print(decr)
+    print("Decrypted message, encrypted by Cryptodome.Cipher.AES - ", decr)
