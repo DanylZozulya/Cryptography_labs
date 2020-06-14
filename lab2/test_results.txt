@@ -1,0 +1,8 @@
+Key -  b'+~\x15\x16(\xae\xd2\xa6\xab\xf7\x15\x88\t\xcfO<'
+plaintext: b'hello world 1234'
+IV: b'~4\xc3\x8f)\xb8Y35W\x94\xe4\x10<,\x0e'
+ciphertext: b'\x9cH \xc9cn\x84j\xbc\xa5U\xfe3I\xcdp'
+decrypted cyphertext: b'hello world 1234'
+____________MyAES_________________
+ciphertext b'\x9cH \xc9cn\x84j\xbc\xa5U\xfe3I\xcdp'
+Decrypted message, encrypted by Cryptodome.Cipher.AES -  hello world 1234
